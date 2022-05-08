@@ -63,16 +63,17 @@ class Cleaning:
     def processing(self):
         clean_data=[]
         for email in self.data:
-          a= self.supprimer_nombre(email[0])
-          a= self.supprimer_email(a)
-          a= self.supprimer_path(a)
-          a= self.supprimer_caract_speciaux(a)
-          a=self.supprimer_espace(a)
-          a=self.normalisation(a)
-          a=self.remove_stopwords(a)
-          a=self.stemming(a)
-          #a=lematization(a)
-          a=self.remove_stopwords(a)
-          clean_data.append([a])
+            
+            a= self.supprimer_nombre(email[0])
+            a= self.supprimer_email(a)
+            a= self.supprimer_path(a)
+            a= self.supprimer_caract_speciaux(a)
+            a=self.supprimer_espace(a)
+            a=self.normalisation(a)
+            a=self.remove_stopwords(a)
+            a=self.stemming(a)
+            #a=lematization(a)
+            a=self.remove_stopwords(a)
+            clean_data.append([a])
         return np.array(clean_data)
 
