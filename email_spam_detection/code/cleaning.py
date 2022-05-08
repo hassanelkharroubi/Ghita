@@ -4,18 +4,24 @@ from nltk.stem import PorterStemmer
 from nltk.tokenize import word_tokenize
 from nltk.stem import WordNetLemmatizer
 from nltk.corpus import stopwords
+from nltk import download
+import numpy as np
+import nltk
+
 class Cleaning:
 
     def __init__(self,data:list):
+        download('punkt')
+        download('stopwords')
         self.data=data
         self.ps = PorterStemmer()
         self.lemmatizer = WordNetLemmatizer()
 
-    def supprimer_nombre(self,text)->str:
+    def supprimer_nombre(self,email:str)->str:
         """
         Function to remove any number within  text
         """
-        text_nombre=re.sub('[0-9]','',text)
+        text_nombre=re.sub('[0-9]+','',email)
         return text_nombre
     def supprimer_email(self,text_url)->str:
 
@@ -47,11 +53,17 @@ class Cleaning:
             words.append(self.ps.stem(w))
         email=' '.join(words)
         return email
-
+    def remove_stopwords(self,email:str)->str:
+        words =[]
+        for w in word_tokenize(email):
+            if w not in stopwords.words('english'):
+                words.append(w)
+        email=' '.join(words)
+        return email
     def processing(self):
         clean_data=[]
-        for comment in self.data :
-          a= self.supprimer_nombre(comment[0])
+        for email in self.data:
+          a= self.supprimer_nombre(email[0])
           a= self.supprimer_email(a)
           a= self.supprimer_path(a)
           a= self.supprimer_caract_speciaux(a)
@@ -61,13 +73,6 @@ class Cleaning:
           a=self.stemming(a)
           #a=lematization(a)
           a=self.remove_stopwords(a)
-          clean_data.append([a,comment[1]])
-        return clean_data
+          clean_data.append([a])
+        return np.array(clean_data)
 
-    def remove_stopwords(self,email:str)->str:
-        words =[]
-        for w in word_tokenize(email):
-            if w not in stopwords.words('english'):
-                words.append(w)
-        email=' '.join(words)
-        return email
